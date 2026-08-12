@@ -1,0 +1,161 @@
+:root {
+  --ink: #F1F5F9;
+  --muted: #64748B;
+  --line: #334155;
+  --violet: #0EA5E9;
+  --blue: #0EA5E9;
+  --orange: #F59E0B;
+  --surface: #1E293B;
+}
+
+body {
+  background: #0A0F1C;
+  color: #F1F5F9;
+  font-family: Manrope, Inter, ui-sans-serif, system-ui, sans-serif;
+}
+
+button, a { -webkit-tap-highlight-color: transparent; }
+button { transition: transform .18s ease, background-color .18s ease, border-color .18s ease; }
+button:hover { transform: translateY(-1px); }
+button:active { transform: translateY(0); }
+button:focus-visible, a:focus-visible, textarea:focus-visible { outline: 2px solid #0EA5E9; outline-offset: 2px; }
+
+/* Shared application shell */
+.app-shell { background: #0A0F1C; }
+.sidebar { background: #1E293B; border-right-color: #334155; }
+.brand { color: #F1F5F9; }
+.brand-mark { box-shadow: none; }
+.nav { gap: 4px; }
+.nav button, .nav-link { min-height: 42px; color: #64748B; font-weight: 600; }
+.nav button:hover, .nav-link:hover, .nav button.active { background: #243147; color: #0EA5E9; }
+.nav button.active { box-shadow: inset 2px 0 #0EA5E9; }
+.pro-card { box-shadow: none; }
+.main { padding-top: 29px; }
+.topbar { margin-bottom: 38px; }
+.welcome h1 { font-weight: 800; color: #F1F5F9; }
+.welcome p { letter-spacing: -.1px; color: #64748B; }
+.date-pill, .icon-button { background: #1E293B; border: 1px solid #334155; color: #F1F5F9; }
+.hero-card { background: #1E293B; border: 1px solid #0EA5E9; box-shadow: none; }
+.hero-card h2, .hero-card p, .hero-actions { position: relative; z-index: 1; }
+.score-card, .card { background: #1E293B; border: 1px solid #334155; box-shadow: none; }
+.card:hover, .score-card:hover { border-color: #0EA5E9; }
+.card h3 { color: #F1F5F9; font-weight: 800; }
+.text-link { padding: 4px; color: #0EA5E9; }
+.text-link:hover { color: #38BDF8; }
+.ring { box-shadow: inset 0 0 0 1px #334155; }
+.insight { background: #1E293B; border: 1px solid #334155; }
+
+/* Blueprint & Voice Workspaces */
+.bp-page, .interview-page, .agents-page { background: #0A0F1C; }
+.bp-topbar, .interview-topbar, .agents-topbar { background: #1E293B; border-bottom: 1px solid #334155; box-shadow: none; }
+.bp-intro h1, .interview-heading h1, .agents-intro h1 { font-weight: 800; color: #F1F5F9; }
+.bp-intro p, .interview-heading p, .agents-intro p { color: #64748B; }
+.bp-workspace, .bp-input-panel, .bp-result, .question-card, .voice-stage, .interview-feedback, .agent-card, .agents-summary, .orchestration-card {
+  background: #1E293B;
+  border: 1px solid #334155;
+  box-shadow: none;
+  color: #F1F5F9;
+}
+.bp-input-footer button { background: #1E293B; border: 1px solid #0EA5E9; color: #F1F5F9; }
+.bp-tree-card, .bp-detail-card, .bp-metric { background: #111827; border: 1px solid #334155; box-shadow: none; }
+.mic-orbit button { background: #1E293B; border: 1px solid #0EA5E9; color: #0EA5E9; box-shadow: none; }
+.transcript-card { background: #111827; border: 1px solid #334155; }
+.analytics-strip { background: #1E293B; border: 1px solid #334155; }
+.analytics-action button { background: #1E293B; border: 1px solid #0EA5E9; color: #F1F5F9; }
+.agent-card:hover { border-color: #0EA5E9; }
+.agent-ident h2 { font-weight: 800; color: #F1F5F9; }
+.agent-task strong { color: #F1F5F9; }
+.agent-card-foot { background: #1E293B; border-top: 1px solid #334155; }
+.agents-note { background: #1E293B; border: 1px solid #334155; color: #64748B; }
+
+@media(max-width:1050px) { .nav-link { justify-content:center; padding:12px; } .nav-link span { display:none; } }
+@media(max-width:650px) { .main { padding-top:21px; } .hero-card,.score-card,.card,.voice-stage,.interview-feedback,.agent-card,.bp-result { border-radius:14px; } .welcome h1 { font-size:25px; } .bp-intro h1 { font-size:32px; } .agents-intro h1 { font-size:27px; } }
+@media(prefers-reduced-motion:reduce) { *,*:before,*:after { animation-duration:.01ms!important; animation-iteration-count:1!important; transition-duration:.01ms!important; scroll-behavior:auto!important; } }
+
+/* Theme control and autonomous dashboard */
+.theme-toggle { width:36px; height:36px; display:grid; place-items:center; border:1px solid #0EA5E9; background:#1E293B; color:#F1F5F9; border-radius:9px }
+.theme-toggle:hover { color:#0EA5E9; border-color:#0EA5E9; background:#243147 }
+.notice { margin-bottom:16px; padding:11px 13px; border:1px solid #10B981; background:rgba(16, 185, 129, 0.1); color:#10B981; border-radius:9px; font-size:12px; font-weight:700 }
+.live-agent-widget h3 { display:flex; align-items:center; gap:6px }
+.live-agent-widget .text-link { display:flex; align-items:center; gap:2px; text-decoration:none }
+.agent-live-list { display:grid; gap:3px }
+.agent-live-row { display:flex; align-items:center; gap:9px; padding:8px 0; border-top:1px solid #334155 }
+.agent-live-row>i { position:relative; width:8px; height:8px; border-radius:50%; flex:none }
+.agent-live-row>i span { position:absolute; inset:-4px; border:1px solid currentColor; border-radius:inherit; opacity:.42; animation:agent-ping 2s ease-out infinite }
+.agent-live-row strong { display:block; color:#F1F5F9; font-size:11px }
+.agent-live-row div span { display:block; color:#64748B; font-size:10px; margin-top:2px }
+@keyframes agent-ping { 0%,100%{transform:scale(.6);opacity:.6} 70%{transform:scale(1.45);opacity:0} }
+
+/* Expanded orchestration workspace */
+.agent-card-foot { display:flex; justify-content:space-between; align-items:center; gap:10px }
+.agent-details { flex:none; border:0; background:transparent; color:#0EA5E9; font-size:10px; font-weight:800; display:flex; align-items:center; gap:3px; padding:5px 0 }
+.orchestration-grid { display:grid; grid-template-columns:1.08fr 1.08fr .84fr; gap:18px; margin-top:18px }
+.orchestration-card { min-height:245px; padding:18px; border:1px solid #334155; border-radius:15px; background:#1E293B; box-shadow:none }
+.orchestration-title { display:flex; align-items:center; justify-content:space-between }
+.orchestration-title>div { display:flex; align-items:center; gap:7px; color:#0EA5E9 }
+.orchestration-title h2 { color:#F1F5F9; margin:0; font-size:13px; letter-spacing:-.2px }
+.orchestration-title>span { color:#10B981; background:rgba(16, 185, 129, 0.1); border-radius:5px; padding:4px 6px; font-size:9px; font-weight:800; text-transform:uppercase }
+.orchestration-title button { border:0; background:transparent; color:#0EA5E9; font-size:10px; font-weight:700; display:flex; align-items:center; gap:3px }
+.workflow-card>p { font-size:11px; line-height:1.6; color:#64748B; margin:12px 0 0 }
+.communication-map { position:relative; height:142px; margin-top:7px }
+.communication-map svg { position:absolute; inset:7px 0; width:100%; height:128px }
+.communication-map path { stroke:#334155; stroke-width:1.2; stroke-dasharray:3 4; fill:none }
+.map-core, .map-node { position:absolute; z-index:1; display:grid; place-items:center; border-radius:50% }
+.map-core { left:calc(50% - 30px); top:43px; width:60px; height:60px; color:#F1F5F9; background:#1E293B; border:1px solid #0EA5E9; box-shadow:none }
+.map-core span { font-size:8px; font-weight:800; margin-top:-2px }
+.map-core svg { position:static; width:15px; height:15px; margin-top:8px }
+.map-node { width:30px; height:30px }
+.node-0 { top:3px; left:7px } .node-1 { top:3px; right:7px } .node-2 { bottom:1px; left:7px } .node-3 { bottom:1px; right:7px }
+.activity-feed { display:grid; gap:0; margin-top:11px }
+.activity-feed>div { display:grid; grid-template-columns:28px 7px 1fr; align-items:start; gap:7px; padding:8px 0; border-top:1px solid #334155 }
+.activity-feed time { font-size:9px; color:#64748B; padding-top:1px }
+.activity-feed i { width:7px; height:7px; margin-top:4px; border-radius:50% }
+.activity-feed p { margin:0; font-size:10px; line-height:1.45; color:#64748B }
+.activity-feed strong { display:block; color:#F1F5F9; margin-bottom:1px }
+.running-card { display:grid; align-content:start; gap:9px }
+.running-flow { padding-top:10px; border-top:1px solid #334155 }
+.running-flow>div:first-child { display:flex; flex-direction:column; gap:3px }
+.running-flow strong { font-size:10px; color:#F1F5F9 }
+.running-flow span { font-size:9px; color:#64748B }
+.running-flow>b { display:block; text-align:right; font-size:10px; color:#0EA5E9; margin:4px 0 }
+.flow-progress { height:4px; background:#111827; border-radius:99px; overflow:hidden }
+.flow-progress i { display:block; height:100%; background:#0EA5E9; border-radius:inherit }
+
+/* Complete dark mode */
+html { transition: background-color .3s ease, color .3s ease }
+html.dark { color-scheme: dark; --line: #334155; --chart-grid: #334155; --chart-text: #64748B; background: #0A0F1C }
+html.dark body { background: #0A0F1C; color: #F1F5F9 }
+html.dark .app-shell, html.dark .bp-page, html.dark .interview-page, html.dark .agents-page { color: #F1F5F9; background: #0A0F1C }
+html.dark .sidebar { background: #1E293B; border-right-color: #334155 }
+html.dark .brand, html.dark .welcome h1, html.dark .card h3, html.dark .hero-card h2, html.dark .agent-ident h2, html.dark .agent-task strong, html.dark .orchestration-title h2, html.dark .activity-feed strong { color: #F1F5F9 }
+html.dark .nav button, html.dark .nav-link, html.dark .crumb, html.dark .welcome p, html.dark .subtle, html.dark .role span, html.dark .timeline-item span { color: #64748B }
+html.dark .nav button:hover, html.dark .nav-link:hover, html.dark .nav button.active { background: #243147; color: #0EA5E9 }
+.dark .pro-card, .dark .score-card, .dark .card, .dark .date-pill, .dark .icon-button, .dark .theme-toggle, .dark .bp-input-panel, .dark .bp-result, .dark .bp-detail-card, .dark .bp-metric, .dark .voice-stage, .dark .interview-feedback, .dark .analytics-strip, .dark .agent-card, .dark .agents-summary, .dark .orchestration-card { background: #1E293B; color: #F1F5F9; border-color: #334155; box-shadow: none }
+.dark .bp-topbar, .dark .interview-topbar, .dark .agents-topbar { background: #1E293B; border-bottom-color: #334155 }
+.dark .bp-page, .dark .interview-page, .dark .agents-page { background: #0A0F1C }
+.dark .bp-intro h1, .dark .interview-heading h1, .dark .agents-intro h1, .dark .question-card h2, .dark .bp-input-head h2, .dark .bp-result h2 { color: #F1F5F9 }
+.dark .bp-intro p, .dark .bp-input-head p, .dark .bp-result-head p, .dark .interview-heading p, .dark .question-card p, .dark .agent-task p, .dark .agent-performance>div:first-child span { color: #64748B }
+.dark textarea { color: #F1F5F9; background: #111827; border-color: #334155 }
+.dark .bp-input-panel, .dark .question-card { background: #1E293B }
+.dark .bp-skill-row, .dark .bp-input-footer button+*, .dark .agent-card-foot { background: #1E293B; border-color: #334155 }
+.dark .bp-skill-row button, .dark .bp-result-actions button, .dark .transcript-head button { background: #1E293B; border-color: #334155; color: #F1F5F9 }
+.dark .bp-description p, .dark .bp-github span, .dark .feedback-score p, .dark .feedback-tip p, .dark .analytics-intro span, .dark .analytic span, .dark .analytic i, .dark .agent-live-row div span { color: #64748B }
+.dark .bp-readme, .dark .bp-tree-card { border-color: #334155 }
+.dark .transcript-card, .dark .feedback-score, .dark .feedback-tip, .dark .timeline-item, .dark .role, .dark .agent-live-row, .dark .activity-feed>div, .dark .running-flow { border-color: #334155 }
+.dark .analytics-intro, .dark .analytic, .dark .analytics-action { border-color: #334155 }
+.dark .analytics-action button { background: #1E293B; border: 1px solid #0EA5E9; color: #F1F5F9 }
+.dark .feedback-title, .dark .feedback-score strong, .dark .transcript-head h3, .dark .profile, .dark .score, .dark .role strong { color: #F1F5F9 }
+.dark .confidence-ring:after { background: #1E293B }
+.dark .star-card { background: #1E293B; border-color: #334155 }
+.dark .star-title, .dark .star-steps div { color: #F1F5F9 }
+.dark .agent-card-foot { background: #1E293B }
+.dark .notice { background: rgba(16, 185, 129, 0.1); border-color: #10B981; color: #10B981 }
+.dark .agents-note { background: #1E293B; border-color: #334155; color: #64748B }
+.dark .theme-toggle { color: #F1F5F9; background: #1E293B; border-color: #0EA5E9 }
+.dark .live-agent-widget h3, .dark .agent-live-row strong { color: #F1F5F9 }
+.dark .company { filter: saturate(.7) brightness(.78) }
+.dark .ring::after { background: #1E293B }
+.dark .scan-pill { background: #1E293B; color: #0EA5E9 }
+
+@media(max-width:850px){ .orchestration-grid{grid-template-columns:1fr}.orchestration-card{min-height:auto}.communication-map{max-width:330px} }
+@media(max-width:650px){ .theme-toggle{width:34px;height:34px}.live-agent-widget{order:-1}.agent-card-foot{align-items:flex-end}.agent-details{font-size:9px} }
