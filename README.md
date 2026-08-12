@@ -1,15 +1,15 @@
 <div align="center">
 
-# ⚡ SeedheOps
+# SeedheOps
 
 ### Autonomous 5-Agent DevOps Incident Response Swarm
 
 <p>
-<b>Triaging telemetry, retrieving historical post-mortems via Hindsight Agent Memory, sequencing deterministic remediation runbooks, and broadcasting audio sitreps to on-call engineers.</b>
+Triaging telemetry, retrieving historical post-mortems via Hindsight Agent Memory, sequencing deterministic remediation runbooks, and broadcasting audio sitreps to on-call engineers.
 </p>
 
 <p>
-Developed with ❤️ by <b>Team Seedhe code</b>
+Developed by <b>Team Seedhe code</b>
 </p>
 
 <p>
@@ -26,32 +26,24 @@ Developed with ❤️ by <b>Team Seedhe code</b>
 
 ---
 
-## 📖 Overview
+## Overview
 
-**SeedheOps** is an enterprise-grade autonomous DevOps incident response swarm. When mission-critical infrastructure triggers alarms—whether a Redis OOM eviction storm, Kubernetes `CrashLoopBackOff`, database connection pool exhaustion, or TLS certificate expiration—SeedheOps activates a coordinated swarm of 5 specialized DevOps agents.
+SeedheOps is an enterprise-grade autonomous DevOps incident response swarm. When mission-critical infrastructure triggers alarms—whether a Redis OOM eviction storm, Kubernetes CrashLoopBackOff, database connection pool exhaustion, or TLS certificate expiration—SeedheOps activates a coordinated swarm of 5 specialized DevOps agents.
 
-Rather than hallucinating ad-hoc scripts, SeedheOps leverages **Hindsight Agent Memory** to semantically search past incident post-mortems across vector databases, retrieve validated mitigation strategies from months prior, and synthesize actionable, executable command runbooks (`kubectl`, `redis-cli`, `aws-cli`) alongside real-time voice sitreps.
+Rather than hallucinating ad-hoc scripts, SeedheOps leverages Hindsight Agent Memory to semantically search past incident post-mortems across vector databases, retrieve validated mitigation strategies from months prior, and synthesize actionable, executable command runbooks (`kubectl`, `redis-cli`, `aws-cli`) alongside real-time voice sitreps.
 
 ---
 
-## 🧠 How We Use Hindsight Agent Memory
+## How We Use Hindsight Agent Memory
 
-Hindsight Agent Memory is the institutional brain of SeedheOps. It bridges real-time telemetry with historical engineering post-mortems using an ultra-fast **4-Step Vector Search Pipeline**:
+Hindsight Agent Memory serves as the institutional brain of SeedheOps. It bridges real-time telemetry with historical engineering post-mortems using a 4-step vector search pipeline:
 
-```text
-┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
-│                             HINDSIGHT VECTOR SEARCH PIPELINE                                     │
-└──────────────────────────────────────────────────────────────────────────────────────────────────┘
-  [Step 1: Telemetry Ingestion] ──► Ingest error logs, stack traces & crash metrics
-                │
-                ▼
-  [Step 2: Vector Embedding]   ──► Embed alert semantics & query Vector DB (hindsight.vectorize.io)
-                │
-                ▼
-  [Step 3: Cosine Similarity]  ──► Cosine match (0.942) retrieves Incident #INC-8821 (60 days ago)
-                │
-                ▼
-  [Step 4: Runbook Synthesis]  ──► Direct payload feed to Runbook Executor (kubectl, redis-cli, aws)
+```mermaid
+flowchart TD
+    A[Step 1: Telemetry Ingestion<br/>Ingest error logs & crash metrics] --> B[Step 2: Vector Embedding<br/>Query Vector DB: hindsight.vectorize.io]
+    B --> C[Step 3: Cosine Similarity<br/>Cosine match 0.942 -> Incident #INC-8821]
+    C --> D[Step 4: Runbook Synthesis<br/>Direct command feed to Runbook Executor]
+
 ```
 
 ### The 4-Step Pipeline Breakdown
@@ -73,51 +65,18 @@ Hindsight Agent Memory is the institutional brain of SeedheOps. It bridges real-
 
 ---
 
-## 🤖 5-Agent Swarm Architecture
+## 5-Agent Swarm Architecture
 
 SeedheOps orchestrates 5 dedicated DevOps agent identities that work in strict sequential synchronization:
 
-```text
-                                 🚨 Incident Alert Ingested
-                                             │
-                                             ▼
-                             ┌───────────────────────────────┐
-                             │    1. Triage Agent            │
-                             │    (ID: orchestrator)         │
-                             │    • Parse Telemetry & Scope  │
-                             └───────────────┬───────────────┘
-                                             │
-                                             ▼
-                             ┌───────────────────────────────┐
-                             │ 2. Hindsight Memory Agent     │
-                             │    (ID: personalization)      │
-                             │    • Vector DB Query (0.942)  │
-                             │    • Retrieve #INC-8821 Fix   │
-                             └───────────────┬───────────────┘
-                                             │
-                                             ▼
-                             ┌───────────────────────────────┐
-                             │ 3. Runbook Executor           │
-                             │    (ID: task-executor)        │
-                             │    • Sequence kubectl, redis  │
-                             │    • Generate Terminal Cmds   │
-                             └───────────────┬───────────────┘
-                                             │
-                                             ▼
-                             ┌───────────────────────────────┐
-                             │ 4. Risk Mitigator             │
-                             │    (ID: recommendation)       │
-                             │    • Helm Values & Limits     │
-                             │    • Prevent Recurrence       │
-                             └───────────────┬───────────────┘
-                                             │
-                                             ▼
-                             ┌───────────────────────────────┐
-                             │ 5. Audio Sitrep Agent         │
-                             │    (ID: voice-narrator)       │
-                             │    • On-Call Voice Sitrep     │
-                             │    • Audio Stream Broadcast   │
-                             └───────────────────────────────┘
+```mermaid
+flowchart TD
+    Alert[Incident Alert Ingested] --> A1[1. Triage Agent<br/>ID: orchestrator]
+    A1 --> A2[2. Hindsight Memory Agent<br/>ID: personalization]
+    A2 --> A3[3. Runbook Executor<br/>ID: task-executor]
+    A3 --> A4[4. Risk Mitigator<br/>ID: recommendation]
+    A4 --> A5[5. Audio Sitrep Agent<br/>ID: voice-narrator]
+
 ```
 
 | # | Agent Identity | System ID | Role & Operational Responsibility |
@@ -130,49 +89,22 @@ SeedheOps orchestrates 5 dedicated DevOps agent identities that work in strict s
 
 ---
 
-## 🏗️ System Architecture Diagram
+## System Architecture Diagram
 
-```text
-┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
-│                                     SEEDHEOPS ARCHITECTURE                                       │
-└──────────────────────────────────────────────────────────────────────────────────────────────────┘
+```mermaid
+graph TD
+    User[SRE User / Alert Webhook] -->|HTTP POST /api/swarm| Client[React + Tailwind Client]
+    Client --> Backend[FastAPI Backend]
+    Backend --> LLM[Gemini 2.5 Flash LLM]
+    Backend --> VectorDB[Hindsight Vector Database<br/>hindsight.vectorize.io]
+    LLM --> Runbook[Deterministic Incident Runbook<br/>kubectl / redis-cli / aws-cli]
+    VectorDB --> Runbook
 
-   [ SRE User / Alert Webhook ]
-                │
-                ▼
-   ┌─────────────────────────┐
-   │ React + Tailwind Client │ ◄─── Glassmorphism Dashboard, Voice Input & Audio Sitrep Player
-   └────────────┬────────────┘
-                │ HTTP POST /api/swarm (JSON)
-                ▼
-   ┌─────────────────────────┐
-   │     FastAPI Backend     │ ◄─── Schema Validation, Error Recovery, Multi-language Support
-   └────────────┬────────────┘
-                │
-        ┌───────┴────────────────────────┐
-        │                                │
-        ▼                                ▼
-┌───────────────────────┐    ┌───────────────────────────────────┐
-│ Gemini 2.5 Flash LLM  │    │ Hindsight Vector Database         │
-│ • Swarm Reasoning     │    │ • Endpoint: hindsight.vectorize.io│
-│ • Runbook Synthesis   │    │ • Cosine Similarity Engine (0.942)│
-│ • Multi-Agent Tracing │    │ • Incident Post-Mortem Memory     │
-└───────────────────────┘    └───────────────────────────────────┘
-        │                                │
-        └───────────────┬────────────────┘
-                        │
-                        ▼
-   ┌──────────────────────────────────────────┐
-   │     Deterministic Incident Runbook       │
-   │  $ kubectl drain pod-worker-3 ...        │
-   │  $ redis-cli -h cache.internal ...       │
-   │  $ aws elasticache modify-replication... │
-   └──────────────────────────────────────────┘
 ```
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 | Layer | Technologies & Tools |
 |---|---|
@@ -184,7 +116,7 @@ SeedheOps orchestrates 5 dedicated DevOps agent identities that work in strict s
 
 ---
 
-## 🚀 Quickstart Guide
+## Quickstart Guide
 
 ### Prerequisites
 - Python 3.10+
@@ -215,7 +147,7 @@ npm run dev
 
 ---
 
-## 👥 Team Deliverables & Content Submissions
+## Team Deliverables & Content Submissions
 
 ### Team: **Seedhe code**
 
@@ -228,5 +160,5 @@ npm run dev
 ---
 
 <div align="center">
-<b>SeedheOps</b> · Built for the Next Generation of Autonomous Site Reliability Engineering 🚀
+<b>SeedheOps</b> &middot; Built for the Next Generation of Autonomous Site Reliability Engineering
 </div>
