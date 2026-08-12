@@ -155,7 +155,7 @@ npm run dev
 |---|---|---|---|---|
 | **Aryan Singh Thapa** | [Read on Dev.to / Medium](https://dev.to) | [View on LinkedIn](https://linkedin.com) | [View on r/devops](https://reddit.com/r/devops) | [Watch YouTube Demo](https://youtube.com) |
 | **Chirag** | [Read on Hashnode](https://hashnode.com) | [View on LinkedIn](https://linkedin.com) | [View on r/kubernetes](https://reddit.com/r/kubernetes) | [Watch YouTube Demo](https://youtube.com) |
-| **Neeraj Gahlout** | [Read on Medium](https://medium.com) | [View on LinkedIn](https://linkedin.com) | [View on r/artificial](https://reddit.com/r/artificial) | [Watch YouTube Demo](https://youtube.com) |
+| **Neeraj Gahlout** | [Read on Medium](https://medium.com/@neerajgahlout36/incidentresponseai-building-an-on-call-sre-agent-that-remembers-production-incidents-49d866f63836) | [View on LinkedIn](https://lnkd.in/p/gZfrFFwh) | [View on r/artificial](https://www.reddit.com/r/LLMDevs/s/DHNxVRSUi7) | [Watch YouTube Demo](https://youtube.com) |
 
 ---
 
