@@ -155,7 +155,7 @@ npm run dev
 |---|---|---|---|---|
 | **Aryan Singh Thapa** | [Read on Medium](https://medium.com/@singh.deva2015/escaping-the-3-am-pagerduty-loop-how-we-built-a-5-agent-sre-swarm-with-hindsight-memory-e0091ca2798d) | [View on LinkedIn](https://www.linkedin.com/posts/aryan-singh-thapa-57aba5324_ai-aiagents-sre-share-7493328857836498944-r3Ks/) | [View on r/aiagents](https://www.reddit.com/r/aiagents/s/KoobskN58H) | [Watch YouTube Demo](https://youtube.com) |
 | **Chirag** | [Read on Hashnode](https://hashnode.com) | [View on LinkedIn](https://linkedin.com) | [View on r/kubernetes](https://reddit.com/r/kubernetes) | [Watch YouTube Demo](https://youtube.com) |
-| **Neeraj Gahlout** | [Read on Medium](https://medium.com) | [View on LinkedIn](https://linkedin.com) | [View on r/artificial](https://reddit.com/r/artificial) | [Watch YouTube Demo](https://youtube.com) |
+| **Neeraj Gahlout** | [Read on Medium](https://medium.com/@neerajgahlout36/incidentresponseai-building-an-on-call-sre-agent-that-remembers-production-incidents-49d866f63836) | [View on LinkedIn](https://lnkd.in/p/gZfrFFwh) | [View on r/artificial](https://www.reddit.com/r/LLMDevs/s/DHNxVRSUi7) | [Watch YouTube Demo](https://youtube.com) |
 
 ---
 
