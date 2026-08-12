@@ -1,9 +1,9 @@
-/** Wellness chart data — market demand vs user proficiency */
+/** Infrastructure telemetry metrics — target baseline vs real-time cluster health */
 export const skills = [
-  { name: 'Sleep', user: 72, demand: 95 },
-  { name: 'Nutrition', user: 68, demand: 92 },
-  { name: 'Fitness', user: 81, demand: 90 },
-  { name: 'Mindfulness', user: 55, demand: 87 },
-  { name: 'Family', user: 88, demand: 91 },
-  { name: 'Productivity', user: 76, demand: 84 },
+  { name: 'Cluster Health', user: 94, demand: 98 },
+  { name: 'p99 Latency', user: 72, demand: 90 },
+  { name: 'Error Budget', user: 85, demand: 95 },
+  { name: 'Memory Headroom', user: 65, demand: 88 },
+  { name: 'CPU Saturation', user: 78, demand: 85 },
+  { name: 'MTTR Index', user: 92, demand: 96 },
 ]

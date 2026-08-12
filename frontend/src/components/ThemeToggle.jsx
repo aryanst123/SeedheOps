@@ -3,7 +3,7 @@ import { Moon, Sun } from 'lucide-react'
 
 export default function ThemeToggle() {
   const [dark, setDark] = useState(() => {
-    const stored = localStorage.getItem('sarvam-swarm-theme')
+    const stored = localStorage.getItem('seedheops-theme') || localStorage.getItem('sarvam-swarm-theme')
     if (stored) return stored === 'dark'
     return true // Default to dark theme
   })
@@ -17,7 +17,7 @@ export default function ThemeToggle() {
       root.classList.add('light')
       root.classList.remove('dark')
     }
-    localStorage.setItem('sarvam-swarm-theme', dark ? 'dark' : 'light')
+    localStorage.setItem('seedheops-theme', dark ? 'dark' : 'light')
   }, [dark])
 
   return (

@@ -95,8 +95,8 @@ export default function LiveSwarmView({ onBack }) {
       </div>
 
       <div className="live-swarm-view__intro">
-        <h2>Agent Swarm Orchestration</h2>
-        <p>Your 5 life agents process requests sequentially — visible, traceable, autonomous.</p>
+        <h2>DevOps Agent Swarm Orchestration</h2>
+        <p>Your 5 DevOps agents process incident alerts sequentially — visible, traceable, autonomous.</p>
       </div>
 
       <SwarmInput

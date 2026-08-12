@@ -1,5 +1,7 @@
 import { SWARM_AGENTS, DAY_PLAN_TASKS, VOICE_NARRATION } from '../data/agents'
 
+const BACKEND_BASE_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:8000'
+
 /**
  * Handles Swarm planning orchestration, API retrieval, and staggered timer schedules.
  */
@@ -21,7 +23,7 @@ export const runSwarmOrchestration = async (
 
   // Fetch plan updates from backend
   try {
-    const response = await fetch('http://localhost:8000/api/swarm', {
+    const response = await fetch(`${BACKEND_BASE_URL}/api/swarm`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

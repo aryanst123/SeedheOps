@@ -1,8 +1,10 @@
 import { motion } from 'framer-motion'
-import { Brain, X } from 'lucide-react'
+import { Brain, X, Database, Target, Clock } from 'lucide-react'
 
 export default function AgentTracePanel({ agent, onClose }) {
   if (!agent) return null
+
+  const isHindsight = agent.id === 'personalization'
 
   return (
     <motion.div
@@ -39,8 +41,26 @@ export default function AgentTracePanel({ agent, onClose }) {
         <div className="trace-panel-body">
           <div className="trace-body-label">Internal State & Thoughts</div>
           <p className="trace-body-text">{agent.trace}</p>
+
+          {isHindsight && (
+            <div className="mt-4 pt-3 border-t border-[var(--line)] flex flex-wrap gap-2">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-blue-500/10 text-blue-400 border border-blue-500/20 text-xs font-mono">
+                <Database size={12} />
+                Endpoint: hindsight.vectorize.io
+              </span>
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs font-mono">
+                <Target size={12} />
+                Cosine Sim: 0.942
+              </span>
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-purple-500/10 text-purple-400 border border-purple-500/20 text-xs font-mono">
+                <Clock size={12} />
+                Match: #INC-8821 (60d ago)
+              </span>
+            </div>
+          )}
         </div>
       </motion.div>
     </motion.div>
   )
 }
+

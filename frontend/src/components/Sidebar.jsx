@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import {
-  Calendar,
-  Clock,
-  Bell,
+  Terminal,
+  Activity,
+  AlertTriangle,
   PlusCircle,
   MessageSquare,
   Plus,
@@ -14,17 +14,17 @@ import ThemeToggle from './ThemeToggle'
 import SwarmLogo from './SwarmLogo'
 
 const QUICK_ACTIONS = [
-  { id: 'plan', label: 'Plan my day', icon: Calendar, prompt: 'Plan my day' },
-  { id: 'schedule', label: 'Check schedule', icon: Clock, prompt: "What's my schedule today?" },
-  { id: 'reminders', label: 'Set reminders', icon: Bell, prompt: 'Set reminders for today' },
-  { id: 'new-chat', label: 'Start new chat', icon: PlusCircle, prompt: '' }
+  { id: 'triage', label: 'Triage active alert', icon: AlertTriangle, prompt: 'Redis cluster memory OOM crash loop in prod' },
+  { id: 'runbook', label: 'Generate runbook', icon: Terminal, prompt: 'Postgres connection pool exhaustion & deadlock' },
+  { id: 'hindsight', label: 'Hindsight search', icon: Activity, prompt: 'Kubernetes API gateway 504 gateway timeout' },
+  { id: 'new-chat', label: 'New incident session', icon: PlusCircle, prompt: '' }
 ]
 
 const INITIAL_CHAT_HISTORY = [
-  { id: '1', title: "Today's priority schedule & break", time: '2h ago', active: true },
-  { id: '2', title: 'Healthy lunch recommendations', time: 'Yesterday' },
-  { id: '3', title: 'Morning walk & workout routine', time: 'Jul 20' },
-  { id: '4', title: 'Evening call reminder', time: 'Jul 18' }
+  { id: '1', title: 'INC-9042: Redis OOM & Failover', time: '2h ago', active: true },
+  { id: '2', title: 'INC-8821: Postgres Lock Contention', time: 'Yesterday' },
+  { id: '3', title: 'INC-7734: K8s Ingress 502 Outage', time: 'Jul 20' },
+  { id: '4', title: 'INC-6520: Payment Latency Spike', time: 'Jul 18' }
 ]
 
 export default function Sidebar({
@@ -76,8 +76,8 @@ export default function Sidebar({
             <SwarmLogo size={20} className="text-[var(--text)]" />
           </div>
           <div className="profile-brand-info">
-            <span className="profile-brand-title">Sarvam Swarm</span>
-            <span className="profile-brand-tag">Life Co-Pilot</span>
+            <span className="profile-brand-title">SeedheOps</span>
+            <span className="profile-brand-tag">DevOps Swarm</span>
           </div>
 
           <div className="sidebar-top-actions-right">
@@ -104,7 +104,7 @@ export default function Sidebar({
 
         {/* Quick Actions Section */}
         <div className="sidebar-section">
-          <span className="sidebar-section-title">Quick Actions</span>
+          <span className="sidebar-section-title">Incident Actions</span>
           <div className="sidebar-nav-list">
             {QUICK_ACTIONS.map((action) => {
               const Icon = action.icon
@@ -131,7 +131,7 @@ export default function Sidebar({
 
         {/* Middle: Clean Chat History List */}
         <div className="sidebar-section sidebar-history-section">
-          <span className="sidebar-section-title">Recent Conversations</span>
+          <span className="sidebar-section-title">Recent Incidents</span>
           <div className="sidebar-history-list">
             {history.map((chat) => (
               <button
@@ -160,7 +160,7 @@ export default function Sidebar({
             }}
           >
             <Plus size={16} />
-            <span>New conversation</span>
+            <span>New Incident</span>
           </button>
 
           <div className="sidebar-theme-wrapper">

@@ -11,7 +11,7 @@ export default function SwarmInput({ value, onChange, onProcess, isProcessing, d
           className="swarm-input-bar__field"
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          placeholder="Hey Swarm, plan my day…"
+          placeholder="Paste telemetry alerts, stack traces, or incident logs…"
           disabled={isProcessing || disabled}
         />
         <button
@@ -21,11 +21,11 @@ export default function SwarmInput({ value, onChange, onProcess, isProcessing, d
           disabled={isProcessing || disabled || !value.trim()}
         >
           <Send size={14} />
-          {isProcessing ? 'Processing…' : 'Process Input'}
+          {isProcessing ? 'Triaging…' : 'Execute Triage'}
         </button>
       </div>
       <p className="swarm-input-hint">
-        Type or edit your request, then hit Process Input — swarm agents activate sequentially.
+        Type or paste your telemetry alert, then hit Execute Triage — DevOps swarm agents activate sequentially.
       </p>
     </div>
   )

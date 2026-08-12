@@ -5,7 +5,7 @@ import './App.css'
 
 export default function App() {
   useEffect(() => {
-    const stored = localStorage.getItem('sarvam-swarm-theme')
+    const stored = localStorage.getItem('seedheops-theme') || localStorage.getItem('sarvam-swarm-theme')
     const dark = stored ? stored === 'dark' : true
     document.documentElement.classList.toggle('dark', dark)
     document.documentElement.classList.toggle('light', !dark)

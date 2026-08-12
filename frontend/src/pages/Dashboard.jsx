@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { Mic, Send, Sparkles, Brain, Volume2, Play, Square, Info, Plus, Menu } from 'lucide-react'
+import { Mic, Send, Sparkles, Brain, Volume2, Play, Square, Info, Plus, Menu, Activity } from 'lucide-react'
 import Sidebar from '../components/Sidebar'
 import ThemeToggle from '../components/ThemeToggle'
 import SwarmLogo from '../components/SwarmLogo'
@@ -10,12 +10,13 @@ import DayPlanOutput from '../components/DayPlanOutput'
 import { SWARM_AGENTS, DAY_PLAN_TASKS, VOICE_NARRATION } from '../data/agents'
 import { speakText, cancelSpeech, createSpeechRecognition } from '../agents/speech'
 import { runSwarmOrchestration } from '../agents/orchestrator'
+
 const QUICK_SUGGESTIONS = [
-  "Plan my day",
-  "What's my schedule today?",
-  "Suggest a healthy lunch near me",
-  "Add 30 min break",
-  "Tell me about my tasks"
+  "Redis cluster memory OOM crash loop in prod",
+  "Postgres connection pool exhaustion & deadlock",
+  "Kubernetes API gateway 504 gateway timeout",
+  "High CPU throttling on payment worker pods",
+  "Cert-manager wildcard TLS certificate expired"
 ]
 
 export default function Dashboard() {
@@ -38,7 +39,7 @@ export default function Dashboard() {
   const [predictiveMode, setPredictiveMode] = useState(false)
   const [toastMessage, setToastMessage] = useState(null)
   const [profileLoaded, setProfileLoaded] = useState(() => {
-    return localStorage.getItem('sarwam_profile_loaded') === 'true'
+    return localStorage.getItem('seedheops_profile_loaded') === 'true'
   })
 
   const recognitionRef = useRef(null)
@@ -106,7 +107,7 @@ export default function Dashboard() {
     if (!recognition) {
       // Fallback simulated voice typing
       setIsListening(true)
-      const simulatedText = "Hey Swarm, plan my day. I have a presentation at 3 PM, feeling low on energy."
+      const simulatedText = "Production Alert: Redis pod OOMKilled in cluster prod-us-east-1, database deadlocks detected."
       let currentIndex = 0
 
       const typingTimer = setInterval(() => {
@@ -145,52 +146,52 @@ export default function Dashboard() {
     }, 3000)
   }
 
-  const addBreakfastTask = () => {
+  const addAutoRemediationTask = () => {
     setTasksList(prev => {
-      if (prev.some(t => t.time === '8:15 AM')) return prev
-      const breakfastTask = {
-        time: '8:15 AM',
-        title: 'Healthy breakfast routine',
-        description: 'Balanced breakfast — auto-added by proactive prediction.',
+      if (prev.some(t => t.time === '+00:03')) return prev
+      const autoTask = {
+        time: '+00:03',
+        title: 'Auto-scale Redis memory limit headroom',
+        description: 'kubectl set resources deployment/redis-cluster -c=redis --limits=memory=8Gi -n prod',
         status: 'done'
       }
       const updated = [...prev]
-      updated.splice(1, 0, breakfastTask)
+      updated.splice(1, 0, autoTask)
       return updated
     })
 
     setPredictionAdded(true)
-    triggerToast("✅ Added to your day")
+    triggerToast("✅ Auto-scale step injected into runbook")
   }
 
   const handleLoadProfile = () => {
-    localStorage.setItem('sarwam_profile_loaded', 'true')
+    localStorage.setItem('seedheops_profile_loaded', 'true')
     setProfileLoaded(true)
-    triggerToast("👤 Profile Memory Loaded")
+    triggerToast("👤 Hindsight Memory Store Loaded")
 
     setTasksList(prev => {
       let updated = [...prev]
 
-      if (!updated.some(t => t.time === '8:30 AM')) {
-        const morningWalk = {
-          time: '8:30 AM',
-          title: '15-min morning walk',
-          description: 'Quick walk with mom — suggested from profile memory.',
+      if (!updated.some(t => t.time === '+00:04')) {
+        const hindsightHotfix = {
+          time: '+00:04',
+          title: 'Apply INC-8821 cache eviction patch',
+          description: 'redis-cli -h cache.internal config set maxmemory-policy volatile-lru',
           status: 'done'
         }
-        const insertIdx = updated.findIndex(t => t.time === '10:30 AM' || t.time === '2:30 PM')
-        updated.splice(insertIdx !== -1 ? insertIdx : 1, 0, morningWalk)
+        const insertIdx = updated.findIndex(t => t.time === '+00:05' || t.time === '+00:08')
+        updated.splice(insertIdx !== -1 ? insertIdx : 1, 0, hindsightHotfix)
       }
 
-      if (!updated.some(t => t.time === '2:15 PM')) {
-        const proteinSnack = {
-          time: '2:15 PM',
-          title: 'Protein snack & recharge',
-          description: 'Light snack to avoid energy dip — suggested from profile memory.',
+      if (!updated.some(t => t.time === '+00:10')) {
+        const hindsightGuard = {
+          time: '+00:10',
+          title: 'Tune connection pool keepalive',
+          description: 'kubectl patch configmap/app-env -p \'{"data":{"DB_POOL_TIMEOUT":"5000"}}\' -n prod',
           status: 'done'
         }
-        const insertIdx = updated.findIndex(t => t.time === '2:30 PM' || t.time === '3:00 PM')
-        updated.splice(insertIdx !== -1 ? insertIdx : updated.length - 1, 0, proteinSnack)
+        const insertIdx = updated.findIndex(t => t.time === '+00:12')
+        updated.splice(insertIdx !== -1 ? insertIdx : updated.length - 1, 0, hindsightGuard)
       }
 
       return updated
@@ -200,11 +201,11 @@ export default function Dashboard() {
   const togglePredictiveMode = () => {
     const nextMode = !predictiveMode
     setPredictiveMode(nextMode)
-    triggerToast(nextMode ? "⚡ Predictive Mode: ON" : "💤 Predictive Mode: OFF")
+    triggerToast(nextMode ? "⚡ Proactive Telemetry Mode: ON" : "💤 Proactive Telemetry Mode: OFF")
 
     if (nextMode && !predictionAdded) {
       setTimeout(() => {
-        addBreakfastTask()
+        addAutoRemediationTask()
       }, 600)
     }
   }
@@ -244,20 +245,20 @@ export default function Dashboard() {
 
           let finalTasks = [...activeData.tasks]
           if (profileLoaded) {
-            if (!finalTasks.some(t => t.time === '8:30 AM')) {
+            if (!finalTasks.some(t => t.time === '+00:04')) {
               finalTasks.splice(1, 0, {
-                time: '8:30 AM',
-                title: '15-min morning walk',
-                description: 'Quick walk with mom — suggested from profile memory.',
+                time: '+00:04',
+                title: 'Apply INC-8821 cache eviction patch',
+                description: 'redis-cli -h cache.internal config set maxmemory-policy volatile-lru',
                 status: 'done'
               })
             }
-            if (!finalTasks.some(t => t.time === '2:15 PM')) {
-              const insertIdx = finalTasks.findIndex(t => t.time === '2:30 PM' || t.time === '3:00 PM')
+            if (!finalTasks.some(t => t.time === '+00:10')) {
+              const insertIdx = finalTasks.findIndex(t => t.time === '+00:08' || t.time === '+00:12')
               finalTasks.splice(insertIdx !== -1 ? insertIdx : finalTasks.length - 1, 0, {
-                time: '2:15 PM',
-                title: 'Protein snack & recharge',
-                description: 'Light snack to avoid energy dip — suggested from profile memory.',
+                time: '+00:10',
+                title: 'Tune connection pool keepalive',
+                description: 'kubectl patch configmap/app-env -p \'{"data":{"DB_POOL_TIMEOUT":"5000"}}\' -n prod',
                 status: 'done'
               })
             }
@@ -382,14 +383,14 @@ export default function Dashboard() {
               <div className="homepage-hero-group">
                 <div className="homepage-hero-title-row">
                   <SwarmLogo size={56} className="homepage-hero-logo" />
-                  <h1 className="homepage-hero-title">Sarvam Swarm</h1>
+                  <h1 className="homepage-hero-title">SeedheOps</h1>
                 </div>
-                <p className="homepage-hero-subtitle">— Autonomous Personalized Life Co-Pilot</p>
+                <p className="homepage-hero-subtitle">— Autonomous DevOps Incident Response Swarm</p>
               </div>
 
               {/* Quick Suggestions Bar */}
               <div className="suggestions-container">
-                <span className="suggestions-title">Try these commands</span>
+                <span className="suggestions-title">Try these incident alerts</span>
                 <div className="suggestions-list">
                   {QUICK_SUGGESTIONS.map((suggestion) => (
                     <button
@@ -416,7 +417,7 @@ export default function Dashboard() {
                   className="main-input-field"
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
-                  placeholder="What do you want to know?"
+                  placeholder="Paste telemetry alerts, stack traces, or incident logs..."
                   onKeyDown={(e) => e.key === 'Enter' && handleStartSwarm()}
                   disabled={isListening}
                 />
@@ -463,7 +464,7 @@ export default function Dashboard() {
                 <Brain className="loader-icon-center text-indigo-400" size={24} />
               </div>
               <div className="typing-text-wrapper">
-                <p className="typing-text">Swarm is planning your day...</p>
+                <p className="typing-text">SeedheOps is generating incident remediation runbook...</p>
               </div>
             </div>
           </motion.div>
@@ -489,7 +490,7 @@ export default function Dashboard() {
                 <div className="logo-icon flex items-center justify-center">
                   <SwarmLogo size={22} className="text-[var(--text)]" />
                 </div>
-                <span className="logo-text">Sarvam Swarm</span>
+                <span className="logo-text">SeedheOps</span>
               </div>
 
               <div className="header-actions">
@@ -508,8 +509,8 @@ export default function Dashboard() {
             <main className="dashboard-main-content">
               <div className="swarm-orchestration-section">
                 <div className="section-title-group">
-                  <h2>Life Agent Swarm Orchestration</h2>
-                  <p>Sequence details for coordinating wellness, calendar recovery and day priorities.</p>
+                  <h2>Autonomous DevOps Swarm Orchestration</h2>
+                  <p>Real-time multi-agent triage, hindsight memory retrieval, runbook sequencing, and audio sitrep.</p>
                 </div>
 
                 <div className="agents-cards-grid mt-6">
@@ -542,7 +543,7 @@ export default function Dashboard() {
                     transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
                     className="dashboard-results-grid mt-8 text-left"
                   >
-                    {/* Left Column: Day Plan Output */}
+                    {/* Left Column: Incident Runbook Output */}
                     <div className="dashboard-results-left">
                       <DayPlanOutput
                         tasks={tasksList}
@@ -553,16 +554,16 @@ export default function Dashboard() {
                       />
                     </div>
 
-                    {/* Right Column: Prediction + Memory Cards */}
+                    {/* Right Column: Telemetry Anomaly + Hindsight Memory Cards */}
                     <div className="dashboard-results-right flex flex-col gap-6">
-                      {/* Swarm Prediction Card */}
+                      {/* Telemetry Prediction Card */}
                       <div className="prediction-card glass-panel">
                         <div className="prediction-card-header">
                           <div className="prediction-card-title-group">
-                            <span className="prediction-card-icon">🕒</span>
+                            <span className="prediction-card-icon">⚡</span>
                             <div className="flex flex-col text-left">
-                              <h3 className="prediction-card-title">Swarm Prediction</h3>
-                              <p className="prediction-card-subtitle">Proactive AI Co-Pilot</p>
+                              <h3 className="prediction-card-title">Telemetry Anomaly Prediction</h3>
+                              <p className="prediction-card-subtitle">Proactive SRE Co-Pilot</p>
                             </div>
                           </div>
 
@@ -584,43 +585,43 @@ export default function Dashboard() {
 
                         <div className="prediction-card-body mt-2 text-left">
                           <p className="prediction-card-desc">
-                            It’s 8:10 AM — you usually eat breakfast at 8:15. Want me to add it automatically?
+                            Memory pressure at 89% on cache nodes — traffic surge expected. Want me to inject auto-scaling runbook step automatically?
                           </p>
 
                           <div className="prediction-card-actions mt-4 text-left">
                             {predictionAdded ? (
                               <div className="flex items-center gap-2 text-emerald-400 font-semibold text-sm">
                                 <span className="w-5 h-5 rounded-full bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20 text-xs font-bold">✓</span>
-                                <span>Added to your day</span>
+                                <span>Added to runbook</span>
                               </div>
                             ) : (
                               <button
                                 type="button"
                                 className="prediction-add-btn"
-                                onClick={addBreakfastTask}
+                                onClick={addAutoRemediationTask}
                               >
-                                Yes, add it now
+                                Yes, add remediation step
                               </button>
                             )}
                           </div>
                         </div>
                       </div>
 
-                      {/* My Profile Memory Card */}
+                      {/* Hindsight Memory Node Card */}
                       <div className="prediction-card glass-panel text-left">
                         <div className="prediction-card-header">
                           <div className="prediction-card-title-group">
-                            <span className="prediction-card-icon">👤</span>
+                            <span className="prediction-card-icon">🧠</span>
                             <div className="flex flex-col">
-                              <h3 className="prediction-card-title">My Profile Memory</h3>
-                              <p className="prediction-card-subtitle text-left">Swarm Memory Node</p>
+                              <h3 className="prediction-card-title">Hindsight Memory Store</h3>
+                              <p className="prediction-card-subtitle text-left">Vector Incident Store</p>
                             </div>
                           </div>
                         </div>
 
                         <div className="prediction-card-body mt-2 text-left">
                           <p className="prediction-card-desc text-[var(--text-muted)] font-medium">
-                            Swarm remembers: Priya prefers morning walks with mom. Gets low on energy between 2–4 PM. Always calls mom at 8:30 PM. Last task: Grocery list prepared.
+                            Vector memory indexed: 14 past cluster incidents. Hindsight suggests matching root-cause signature from Incident #INC-8821 (Redis cache eviction storm).
                           </p>
 
                           <AnimatePresence>
@@ -632,16 +633,16 @@ export default function Dashboard() {
                                 className="mt-4 pt-3 border-t border-[var(--line)] flex flex-col gap-2 overflow-hidden"
                               >
                                 <span className="text-xs font-semibold text-[var(--accent)] uppercase tracking-wider">
-                                  Smart suggestions loaded:
+                                  Historical mitigations retrieved:
                                 </span>
                                 <div className="flex flex-col gap-2 text-xs text-[var(--text-muted)]">
                                   <div className="flex items-start gap-2 bg-[var(--surface-hover)] p-2.5 rounded-lg border border-[var(--line)]">
                                     <span className="text-[var(--accent)] font-bold">💡</span>
-                                    <span>Since you usually walk in the morning, I added 15-min walk (8:30 AM).</span>
+                                    <span>From INC-8821: Injected volatile-lru cache eviction patch (+00:04).</span>
                                   </div>
                                   <div className="flex items-start gap-2 bg-[var(--surface-hover)] p-2.5 rounded-lg border border-[var(--line)]">
                                     <span className="text-[var(--accent)] font-bold">💡</span>
-                                    <span>Your energy is low at 2 PM — should I suggest a protein snack? (Added at 2:15 PM).</span>
+                                    <span>Connection contention: Injected DB_POOL_TIMEOUT keepalive tuning (+00:10).</span>
                                   </div>
                                 </div>
                               </motion.div>
@@ -651,7 +652,7 @@ export default function Dashboard() {
                                 className="prediction-add-btn mt-4"
                                 onClick={handleLoadProfile}
                               >
-                                Load My Profile
+                                Load Hindsight Memory
                               </button>
                             )}
                           </AnimatePresence>
@@ -696,7 +697,7 @@ export default function Dashboard() {
       </AnimatePresence>
 
       <footer className="footer-text flex flex-col gap-1 items-center justify-center">
-        <span>© 2026 Sarvam Swarm Lite · Autonomous Personalized Life Co-Pilot</span>
+        <span>© 2026 SeedheOps · Autonomous DevOps Incident Response Swarm</span>
       </footer>
       </div>
     </div>

@@ -1,28 +1,27 @@
 import {
   Bell,
-  BookOpen,
-  CalendarHeart,
+  Terminal,
+  Activity,
   Check,
   ChevronRight,
-  Compass,
-  Heart,
+  Shield,
+  Layers,
   LayoutDashboard,
-  Lightbulb,
-  Rocket,
+  Cpu,
   Settings,
   Sparkles,
-  Target,
-  TrendingUp,
+  Server,
+  Radio,
   UserRound,
 } from 'lucide-react'
 import ThemeToggle from './ThemeToggle'
 
 const navigation = [
-  [LayoutDashboard, 'Overview'],
-  [Compass, 'Life strategy'],
-  [Heart, 'Wellness intelligence'],
-  [BookOpen, 'Daily plan'],
-  [Target, 'Goals'],
+  [LayoutDashboard, 'Incident Overview'],
+  [Layers, 'Cluster Topology'],
+  [Activity, 'Telemetry Stream'],
+  [Terminal, 'Runbook Sequences'],
+  [Shield, 'Risk Mitigation'],
 ]
 
 /** Shared shell — 248px sidebar + topbar */
@@ -42,9 +41,9 @@ export default function DashboardShell({
             <div className="brand-mark">
               <Sparkles size={17} />
             </div>
-            <span>Sarvam Swarm Lite</span>
+            <span>SeedheOps</span>
           </div>
-          <div className="brand-subtitle">Agentic AI Life Co-Pilot</div>
+          <div className="brand-subtitle">DevOps Swarm Co-Pilot</div>
 
           <nav className="nav">
             {navigation.map(([Icon, label]) => (
@@ -59,16 +58,16 @@ export default function DashboardShell({
               </button>
             ))}
             <button type="button">
-              <CalendarHeart size={17} />
-              <span>Life calendar</span>
+              <Server size={17} />
+              <span>Node telemetry</span>
             </button>
             <button type="button">
-              <UserRound size={17} />
-              <span>Voice assistant</span>
+              <Radio size={17} />
+              <span>Audio sitrep</span>
             </button>
             <button type="button" onClick={onOpenSwarm}>
               <Sparkles size={17} />
-              <span>AI agents</span>
+              <span>DevOps agents</span>
             </button>
             <button type="button">
               <Settings size={17} />
@@ -77,19 +76,18 @@ export default function DashboardShell({
           </nav>
 
           <div className="user-card">
-            <div className="user-avatar">PS</div>
+            <div className="user-avatar">OC</div>
             <div>
-              <strong>Priya</strong>
-              <span>Working professional</span>
-              <span>Bangalore, India</span>
+              <strong>DevOps On-Call</strong>
+              <span>Site Reliability Engineer</span>
+              <span>Cluster prod-us-east-1</span>
             </div>
           </div>
 
           <div className="pro-card">
-            <h4>Autonomous life mode</h4>
+            <h4>Autonomous mitigation mode</h4>
             <p>
-              Let your AI swarm coordinate wellness, family time, and daily priorities without
-              manual planning.
+              Let your AI swarm triage alerts, match historical incident runbooks, and generate remediation commands in real time.
             </p>
             <button type="button" onClick={() => setNotice(true)}>
               Open agent controls
@@ -100,9 +98,8 @@ export default function DashboardShell({
         <main className="main">
           <header className="topbar">
             <div className="crumb">
-              Sarvam Swarm Lite{' '}
-              <ChevronRight size={12} style={{ verticalAlign: 'middle' }} /> Agentic AI Life
-              Co-Pilot
+              SeedheOps{' '}
+              <ChevronRight size={12} style={{ verticalAlign: 'middle' }} /> Autonomous DevOps Incident Response
             </div>
             <div className="top-actions">
               <ThemeToggle />
@@ -115,23 +112,22 @@ export default function DashboardShell({
                 <Bell size={17} />
               </button>
               <div className="profile">
-                <div className="avatar">PS</div>
-                <span>Priya</span>
+                <div className="avatar">OC</div>
+                <span>On-Call SRE</span>
               </div>
             </div>
           </header>
 
           {notice && (
             <div className="notice">
-              Agent controls are live. Your life swarm is prioritising the next best action for
-              your day.
+              Agent controls are live. Your DevOps swarm is triaging cluster telemetry and sequencing hotfix commands.
             </div>
           )}
 
           {children}
 
           <footer className="team-footer">
-            © 2026 Sarvam Swarm Lite<span>·</span> Personalized Life Agent Swarm
+            © 2026 SeedheOps<span>·</span> Autonomous DevOps Incident Response Swarm
           </footer>
         </main>
       </div>

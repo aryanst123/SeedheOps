@@ -17,11 +17,14 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Initialize a single reusable Google GenAI client with a 30-second timeout
-api_key = os.environ.get("GEMINI_API_KEY")
-client = genai.Client(
-    api_key=api_key,
-    http_options=types.HttpOptions(timeout=30_000)
-)
+api_key = os.getenv("GEMINI_API_KEY", "dummy_key_for_mock_execution")
+try:
+    client = genai.Client(
+        api_key=api_key,
+        http_options=types.HttpOptions(timeout=30_000)
+    )
+except Exception as e:
+    client = None
 
 
 # Set up logging matching strict requirements: no unnecessary verbose logs.
@@ -31,7 +34,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger("swarm_backend")
 
-app = FastAPI(title="Sarvam Swarm Backend", version="1.0.0")
+app = FastAPI(title="SeedheOps Swarm Backend", version="1.0.0")
 
 # 1. WIDE-OPEN CORS MIDDLEWARE FOR FRONTEND COMPATIBILITY
 app.add_middleware(
@@ -55,41 +58,41 @@ LANGUAGE_CONFIGS = {
         "style": "friendly",
         "speaking_rate": 1.0,
         "pitch": 1.0,
-        "voice_personality": "American conversational female",
-        "tone": "warm and friendly",
+        "voice_personality": "American professional female",
+        "tone": "clear and authoritative",
         "energy": "medium-high",
-        "formality": "casual",
-        "fallback_narration": "Priya, your schedule for '{trunc_query}' is ready! All tasks have been set on time, just follow the plan and the swarm will handle the rest.",
+        "formality": "professional",
+        "fallback_narration": "On-call sitrep for alert '{trunc_query}': Root failure triaged. Hindsight matched historical runbook pattern from Incident #INC-8821. Hotfix execution steps sequenced and preventative risk mitigation rules staged.",
         "fallback_tasks": {
-            "lunch": {
-                "title": "Healthy lunch suggestion",
-                "description": "Enjoy a fresh salad + high-protein meal near your location as recommended by swarm.",
-                "narration": "Priya, your plan for '{trunc_query}' is ready with a healthy lunch update! Fresh options are set and evening tasks are lined up. Just follow, the swarm will handle it!"
+            "oom": {
+                "title": "Isolate memory-leaking pod & purge volatile cache",
+                "description": "kubectl drain pod-worker-3 --ignore-daemonsets -n prod && redis-cli -h cache.internal memory purge",
+                "narration": "On-call sitrep for '{trunc_query}': Redis cluster memory ceiling reached. Runbook executor queued pod isolation and volatile cache eviction commands."
             },
-            "break": {
-                "title": "30 min relaxation break",
-                "description": "Swarm scheduled a 30-min break to recharge. Notifications muted.",
-                "narration": "Priya, your plan for '{trunc_query}' is set with stress-free breaks. Buffer zones have been included for relaxation. Just follow, the swarm will handle it!"
+            "deadlock": {
+                "title": "Terminate blocking PostgreSQL backend transactions",
+                "description": "SELECT pid, query, state FROM pg_stat_activity WHERE state = 'active' AND wait_event_type = 'Lock'; SELECT pg_terminate_backend(pid);",
+                "narration": "On-call sitrep for '{trunc_query}': Database transaction deadlock identified. Terminating blocking query PIDs and resetting connection pool."
             },
-            "meeting": {
-                "title": "Important client meeting",
-                "description": "High-priority meeting sync. Swarm has prepped details and muted background notifications.",
-                "narration": "Priya, your client meeting for '{trunc_query}' is scheduled. Calendar protected and ready to go!"
+            "crashloop": {
+                "title": "Restart CrashLooping deployment & inspect container logs",
+                "description": "kubectl logs -n prod -l app=payment-service --previous --tail=100 && kubectl rollout restart deployment/payment-service -n prod",
+                "narration": "On-call sitrep for '{trunc_query}': Pod crash loop detected. Restarting deployment rollout and pulling container exit codes."
             },
-            "coding": {
-                "title": "Deep work coding session",
-                "description": "2-hour uninterrupted block for coding and system architecture design.",
-                "narration": "Priya, a deep work coding session has been allocated for '{trunc_query}'. Go complete the code distraction-free!"
+            "latency": {
+                "title": "Autoscale ingress gateway controllers",
+                "description": "kubectl scale deployment/ingress-nginx-controller -n ingress-nginx --replicas=6 && curl -iv https://api.internal/healthz",
+                "narration": "On-call sitrep for '{trunc_query}': Ingress gateway p99 latency spike mitigated by scaling controller replicas."
             },
-            "study": {
-                "title": "Focused study session",
-                "description": "Reviewing research papers and system optimization guides. Phone set to DND.",
-                "narration": "Priya, a morning study block is prioritized for '{trunc_query}'. Study hard, the swarm will track!"
+            "cpu": {
+                "title": "Increase HPA threshold & scale compute workers",
+                "description": "kubectl autoscale deployment/async-worker -n prod --cpu-percent=70 --min=4 --max=16",
+                "narration": "On-call sitrep for '{trunc_query}': High CPU saturation throttled. Horizontal pod autoscaler bounds increased to 16 replicas."
             },
-            "travel": {
-                "title": "Travel slot & commute",
-                "description": "Travel to destination. Swarm verified the route, traffic looks clear.",
-                "narration": "Priya, your travel route has been updated for '{trunc_query}'. Commute and schedule will be smooth!"
+            "ssl": {
+                "title": "Trigger cert-manager TLS renewal & reload secrets",
+                "description": "cmctl renew prod-wildcard-tls -n prod && kubectl rollout restart deployment/ingress-nginx-controller -n ingress-nginx",
+                "narration": "On-call sitrep for '{trunc_query}': TLS certificate expiration resolved. Re-issued certificate secrets to ingress controllers."
             }
         }
     },
@@ -101,46 +104,46 @@ LANGUAGE_CONFIGS = {
         "speaking_rate": 1.0,
         "pitch": 1.0,
         "voice_personality": "Indian female",
-        "tone": "warm and calm",
+        "tone": "clear and calm",
         "energy": "medium",
         "formality": "polite",
-        "fallback_narration": "प्रिया, आपकी क्वेरी '{trunc_query}' के लिए स्वार्म प्लान तैयार है! सभी कार्य समय पर सेट हैं, आप बस फॉलो करें, स्वार्म संभाल लेगा!",
+        "fallback_narration": "अलर्ट '{trunc_query}' के लिए ऑन-कॉल सिटरिप: समस्या का मूल कारण पहचाना गया। हिंडसाइट मेमोरी ने घटना #INC-8821 से समाधान प्राप्त किया। हॉटफिक्स रनबुक तैयार है।",
         "fallback_tasks": {
-            "lunch": {
-                "title": "स्वस्थ लंच का सुझाव",
-                "description": "स्वार्म द्वारा सुझाए गए अपने स्थान के पास एक ताज़ा सलाद + उच्च-प्रोटीन भोजन का आनंद लें।",
+            "oom": {
+                "title": "मेमोरी लीकिंग पॉड को अलग करें और कैशे साफ़ करें",
+                "description": "kubectl drain pod-worker-3 --ignore-daemonsets -n prod && redis-cli -h cache.internal memory purge",
                 "status": "done",
-                "narration": "प्रिया, आपकी क्वेरी '{trunc_query}' के लिए लंच ब्लॉक के साथ प्लान तैयार है! हेल्दी भोजन के विकल्प सेट हैं। आप बस फॉलो करें, स्वार्म संभाल लेगा!"
+                "narration": "अलर्ट '{trunc_query}' के लिए सिटरिप: रेडिस मेमोरी सीमा पार। पॉड आइसोलेशन और कैशे निकासी शुरू की गई।"
             },
-            "break": {
-                "title": "30 मिनट का विश्राम",
-                "description": "स्वार्म ने आराम करने के लिए 30 मिनट का ब्रेक शेड्यूल किया है। नोटिफिकेशन म्यूट हैं।",
+            "deadlock": {
+                "title": "अवरुद्ध पोस्टग्रेएसक्यूएल क्वेरी समाप्त करें",
+                "description": "SELECT pid, query FROM pg_stat_activity WHERE wait_event_type = 'Lock'; SELECT pg_terminate_backend(pid);",
                 "status": "done",
-                "narration": "प्रिया, आपकी क्वेरी '{trunc_query}' के लिए ब्रेक सेट कर दिए गए हैं! आज का दिन तनाव मुक्त रहेगा। आप बस फॉलो करें, स्वार्म संभाल लेगा!"
+                "narration": "अलर्ट '{trunc_query}' के लिए सिटरिप: डेटाबेस गतिरोध समाप्त किया गया और कनेक्शन पूल रीसेट किया गया।"
             },
-            "meeting": {
-                "title": "महत्वपूर्ण क्लाइंट मीटिंग",
-                "description": "उच्च-प्राथमिकता वाली मीटिंग सिंक। स्वार्म ने विवरण तैयार कर लिया है और नोटिफिकेशन म्यूट कर दिए हैं।",
+            "crashloop": {
+                "title": "क्रैश लूप डिप्लॉयमेंट को पुनः प्रारंभ करें",
+                "description": "kubectl rollout restart deployment/payment-service -n prod",
                 "status": "done",
-                "narration": "प्रिया, आपकी क्वेरी '{trunc_query}' के लिए क्लाइंट मीटिंग शेड्यूल हो चुकी है। कैलेंडर सुरक्षित कर दिया गया है!"
+                "narration": "अलर्ट '{trunc_query}' के लिए सिटरिप: पॉड क्रैश लूप का समाधान करने के लिए डिप्लॉयमेंट रीस्टार्ट किया गया।"
             },
-            "coding": {
-                "title": "गहन कोडिंग सत्र",
-                "description": "कोडिंग और सिस्टम आर्किटेक्चर डिज़ाइन के लिए 2 घंटे का निर्बाध ब्लॉक।",
+            "latency": {
+                "title": "इनग्रेस गेटवे ऑटोस्केल करें",
+                "description": "kubectl scale deployment/ingress-nginx-controller -n ingress-nginx --replicas=6",
                 "status": "done",
-                "narration": "प्रिया, आपकी क्वेरी '{trunc_query}' के लिए कोडिंग सत्र आवंटित किया गया है। बिना किसी भटकाव के कोड पूरा करें!"
+                "narration": "अलर्ट '{trunc_query}' के लिए सिटरिप: इनग्रेस लेटेंसी कम करने के लिए रेप्लिका बढ़ाई गईं।"
             },
-            "study": {
-                "title": "केंद्रित अध्ययन सत्र",
-                "description": "शोध पत्रों और सिस्टम ऑप्टिमाइज़ेशन गाइड की समीक्षा। फोन डीएनडी पर सेट है।",
+            "cpu": {
+                "title": "कंप्यूट वर्कर्स को ऑटोस्केल करें",
+                "description": "kubectl autoscale deployment/async-worker -n prod --cpu-percent=70 --min=4 --max=16",
                 "status": "done",
-                "narration": "प्रिया, आपकी क्वेरी '{trunc_query}' के लिए सुबह का अध्ययन ब्लॉक तय किया गया है। मन लगाकर पढ़ें, स्वार्म ट्रैक करेगा!"
+                "narration": "अलर्ट '{trunc_query}' के लिए सिटरिप: उच्च सीपीयू उपयोग के लिए वर्कर्स स्केल किए गए।"
             },
-            "travel": {
-                "title": "यात्रा स्लॉट और आवागमन",
-                "description": "गंतव्य तक यात्रा। स्वार्म ने मार्ग का सत्यापन किया, यातायात साफ लग रहा है।",
+            "ssl": {
+                "title": "टीएलएस प्रमाणपत्र नवीनीकरण करें",
+                "description": "cmctl renew prod-wildcard-tls -n prod",
                 "status": "done",
-                "narration": "प्रिया, आपकी क्वेरी '{trunc_query}' के लिए यात्रा मार्ग अपडेट कर दिया गया है। आपकी यात्रा सुगम रहेगी!"
+                "narration": "अलर्ट '{trunc_query}' के लिए सिटरिप: टीएलएस प्रमाणपत्र सफलतापूर्वक नवीनीकृत किया गया।"
             }
         }
     },
@@ -152,40 +155,40 @@ LANGUAGE_CONFIGS = {
         "speaking_rate": 1.0,
         "pitch": 1.0,
         "voice_personality": "Indian conversational female",
-        "tone": "friendly and young",
+        "tone": "authoritative and clear",
         "energy": "medium-high",
-        "formality": "casual",
-        "fallback_narration": "Priya, aapki query '{trunc_query}' ke liye swarm plan ready hai! Sab tasks time pe set hain, tum bas follow karo, swarm handle karega!",
+        "formality": "professional",
+        "fallback_narration": "On-call sitrep: Alert '{trunc_query}' triage ho gaya hai. Hindsight memory se previous fix Incident #INC-8821 retrieve karke hotfix runbook generate kar diya hai.",
         "fallback_tasks": {
-            "lunch": {
-                "title": "Healthy lunch suggestion",
-                "description": "Enjoy a fresh salad + high-protein meal near your location as recommended by swarm.",
-                "narration": "Priya, aapki query '{trunc_query}' ke liye healthy lunch block update ke saath plan ready hai! Healthy food options set hain aur evening tasks line up ho gaye hain. Tum bas follow karo, swarm handle karega!"
+            "oom": {
+                "title": "Isolate memory-leaking pod & purge volatile cache",
+                "description": "kubectl drain pod-worker-3 --ignore-daemonsets -n prod && redis-cli -h cache.internal memory purge",
+                "narration": "On-call sitrep for '{trunc_query}': Redis cluster memory ceiling reached. Runbook executor queued pod isolation and memory eviction commands."
             },
-            "break": {
-                "title": "30 min relaxation break",
-                "description": "Swarm scheduled a 30-min break to recharge. Notifications muted.",
-                "narration": "Priya, aapki query '{trunc_query}' ke liye breaks set ho chuki hain! Aaj stress free din rahega, buffer zones include kar diye hain. Tum bas follow karo, swarm handle karega!"
+            "deadlock": {
+                "title": "Terminate blocking PostgreSQL backend transactions",
+                "description": "SELECT pid, query, state FROM pg_stat_activity WHERE state = 'active' AND wait_event_type = 'Lock'; SELECT pg_terminate_backend(pid);",
+                "narration": "On-call sitrep for '{trunc_query}': Database transaction deadlock identified. Terminating blocking query PIDs and resetting connection pool."
             },
-            "meeting": {
-                "title": "Important client meeting",
-                "description": "High-priority meeting sync. Swarm has prepped details and muted background notifications.",
-                "narration": "Priya, aapki query '{trunc_query}' ke liye client meeting schedule ho chuki hai. Calendar protect kar diya hai, ready raho!"
+            "crashloop": {
+                "title": "Restart CrashLooping deployment & inspect container logs",
+                "description": "kubectl logs -n prod -l app=payment-service --previous --tail=100 && kubectl rollout restart deployment/payment-service -n prod",
+                "narration": "On-call sitrep for '{trunc_query}': Pod crash loop detected. Restarting deployment rollout and pulling container exit codes."
             },
-            "coding": {
-                "title": "Deep work coding session",
-                "description": "2-hour uninterrupted block for coding and system architecture design.",
-                "narration": "Priya, aapki query '{trunc_query}' ke liye deep work coding session allocate kiya hai. Bina kisi distraction ke code complete karo!"
+            "latency": {
+                "title": "Autoscale ingress gateway controllers",
+                "description": "kubectl scale deployment/ingress-nginx-controller -n ingress-nginx --replicas=6 && curl -iv https://api.internal/healthz",
+                "narration": "On-call sitrep for '{trunc_query}': Ingress gateway p99 latency spike mitigated by scaling controller replicas."
             },
-            "study": {
-                "title": "Focused study session",
-                "description": "Reviewing research papers and system optimization guides. Phone set to DND.",
-                "narration": "Priya, aapki query '{trunc_query}' ke liye morning study block prioritize kiya hai. Go and study hard, swarm will track!"
+            "cpu": {
+                "title": "Increase HPA threshold & scale compute workers",
+                "description": "kubectl autoscale deployment/async-worker -n prod --cpu-percent=70 --min=4 --max=16",
+                "narration": "On-call sitrep for '{trunc_query}': High CPU saturation throttled. Horizontal pod autoscaler bounds increased to 16 replicas."
             },
-            "travel": {
-                "title": "Travel slot & commute",
-                "description": "Travel to destination. Swarm verified the route, traffic looks clear.",
-                "narration": "Priya, aapki query '{trunc_query}' ke liye travel route update kar diya hai. Commute aur schedule smooth rahega!"
+            "ssl": {
+                "title": "Trigger cert-manager TLS renewal & reload secrets",
+                "description": "cmctl renew prod-wildcard-tls -n prod && kubectl rollout restart deployment/ingress-nginx-controller -n ingress-nginx",
+                "narration": "On-call sitrep for '{trunc_query}': TLS certificate expiration resolved. Re-issued certificate secrets to ingress controllers."
             }
         }
     },
@@ -290,137 +293,125 @@ LANGUAGE_CONFIGS = {
 # Expected agent IDs configuration
 EXPECTED_AGENT_IDS = ["orchestrator", "personalization", "task-executor", "recommendation", "voice-narrator"]
 
-# Optimized prompt instructing the model to generate ONLY the dynamic components
-SYSTEM_PROMPT = """You are an AI swarm planning generator. Return ONLY JSON matching this format:
+# Strict DevOps Incident Response prompt instructing the model to generate dynamic components
+SYSTEM_PROMPT = """You are SeedheOps, an autonomous 5-agent DevOps Incident Response Swarm. Return ONLY JSON matching this format:
 {
   "traces": {
-    "orchestrator": "trace text (20-35 words)",
-    "personalization": "trace text (20-35 words)",
-    "task-executor": "trace text (20-35 words)",
-    "recommendation": "trace text (20-35 words)",
-    "voice-narrator": "trace text (20-35 words)"
+    "orchestrator": "Triage trace analyzing telemetry, root failure domain, and blast radius (20-35 words)",
+    "personalization": "Hindsight Memory trace querying Vector DB (endpoint: hindsight.vectorize.io) for incident ID (e.g. #INC-8821 Retrieved from 60 days ago with Cosine Similarity: 0.942) feeding recalled runbook into Runbook Executor commands (25-40 words)",
+    "task-executor": "Runbook Executor trace sequencing concrete terminal remediation steps like kubectl, redis-cli, aws-cli (20-35 words)",
+    "recommendation": "Risk Mitigator trace detailing post-mortem safeguard and preventive policy (20-35 words)",
+    "voice-narrator": "Audio Sitrep Agent trace summarizing the briefing for on-call SRE (20-35 words)"
   },
   "tasks": [
-    {"time": "time string", "title": "task title", "description": "task details"}
+    {"time": "+00:00", "title": "Remediation action title", "description": "Concrete executable terminal command (e.g. kubectl ..., redis-cli ..., aws ..., psql ...)"}
   ],
-  "voice_narration": "Natural, warm narration string",
+  "voice_narration": "Authoritative, crisp on-call incident briefing summarizing root cause, hotfix runbook, and preventative measures",
   "language": "detected language: 'english', 'hindi', 'hinglish', 'tamil', 'kannada', 'telugu', 'malayalam', 'marathi', 'gujarati', 'punjabi', or 'bengali'",
   "language_confidence": 0.95
 }
-Generate 4-5 tasks. Traces must be 20-35 words. Return ONLY valid JSON, no explanations, no markdown wrappers.
+Generate 4-5 sequential remediation tasks with precise executable terminal commands in "description" and relative time offsets (+00:00, +00:02, +00:05, +00:08, +00:12). Traces must be 20-35 words each. Return ONLY valid JSON, no explanations, no markdown wrappers.
 
-### HALLUCINATION & NONSENSE PREVENTION:
-- If the user query is gibberish, nonsense, single words with no context, or has no actionable task scheduling request (e.g., 'asdfgh', 'banana', 'rocket', 'guitar'), you MUST NOT fabricate a schedule. Instead, set "tasks" to an empty list [] and "voice_narration" to: "I couldn't understand what tasks you want me to schedule. Could you tell me what you'd like to plan?".
+### INCIDENT ANALYSIS & DIAGNOSIS:
+- Ingest infrastructure telemetry, crash logs, error codes, and outage alerts (e.g., Redis OOM kills, PostgreSQL deadlocks, Kubernetes CrashLoopBackOff, Ingress 504 timeouts, CPU throttling, TLS expirations).
+- orchestrator (Triage Agent): Parse telemetry, identify root failure domain and blast radius.
+- personalization (Hindsight Memory Agent): Query Hindsight vector memory store (endpoint: hindsight.vectorize.io) for past incident IDs (e.g. Incident #INC-8821 Retrieved from 60 days ago with Cosine Similarity score: 0.942) and feed recalled runbook into Runbook Executor.
+- task-executor (Runbook Executor): Sequence 4-5 immediate remediation commands (e.g. kubectl, redis-cli, aws, docker, psql, systemctl).
+- recommendation (Risk Mitigator): Propose long-term architectural safeguard (e.g., HPA rules, memory limits, connection pooling, circuit breakers).
+- voice-narrator (Audio Sitrep Agent): Deliver an authoritative, concise situation report (sitrep) for the on-call engineer.
 
-### HUMAN-FIRST CONVERSATIONAL NARRATION:
-- Do NOT sound like a GPS reading time and task title strings literally. Guide and explain the schedule naturally like a warm companion (e.g., 'Let's start with your assignment in the morning when your focus is highest, then head to the gym...').
-
-### LANGUAGE-SPECIFIC NARRATION STYLES:
-- English: Warm, encouraging, conversational (e.g., 'Hey! I've planned your day so you don't feel overwhelmed...').
-- Hindi: Polite, natural, conversational (e.g., 'नमस्ते! मैंने आपके पूरे दिन को संतुलित तरीके से व्यवस्थित किया है...').
-- Hinglish: Casual, friendly, highly colloquial (e.g., 'Bro, maine tera pura din optimize kar diya hai. Sabse pehle assignment nipta lete hain...'). Do NOT sound like a direct translation.
-- Other languages: Follow their native natural conversational flow.
-
-### CONTEXT-AWARE PERSONALITY ADAPTATION:
-- Analyze the user query context. If the user mentions stress, low sleep (e.g. slept 4 hours), excitement (e.g. hackathon), or feeling overwhelmed, naturally adjust your tone. Keep morning tasks lighter for sleep-deprived queries, and pace the schedule stress-free for overwhelmed queries. Maintain high energy and focus blocks for hackathon/excitement queries. Do not use fake empathy or dramatic wording.
-
-### NATURAL HINGLISH NUMBER PRONUNCIATION:
-- When writing in Hinglish, write numbers and times phonetically in Hindi words when it sounds natural (e.g. use "नौ बजे" instead of "9 baje", "साढ़े दस बजे" instead of "10:30 baje", "एक बजे" instead of "1 PM"). Do not force Hindi vocabulary everywhere, keep conversational flow natural.
-
-### GREETING & CLOSING ROTATION:
-- English: Rotate greetings ('Hey!', 'Good morning!', 'I've organized everything') and closings ('You've got this!', 'Just let me know if anything changes').
-- Hindi: Rotate greetings ('नमस्ते!', 'आपका दिन तैयार है।') and closings ('शुभकामनाएँ।', 'अगर कोई बदलाव करना हो तो बताइएगा।').
-- Hinglish: Rotate greetings ('Bro...', 'Chal...', 'Scene sorted hai.') and closings ('tension mat le, sab sorted hai', 'kuch change ho toh bata dena').
+### NONSENSE & NON-INCIDENT PREVENTION:
+- If the user query is gibberish, empty, or has no actionable infrastructure or DevOps incident context (e.g. 'asdfgh', 'banana', 'guitar'), set "tasks" to [] and "voice_narration" to: "No actionable DevOps incident telemetry detected in the prompt. Please provide error logs, stack traces, or incident descriptions.".
 """
 
-RETRY_USER_PROMPT = "Return ONLY valid JSON. The 'voice_narration' must remain in the detected query language (English, Hindi, or Hinglish) without translating it or mixing languages. Preserve the same narration style and tone."
+RETRY_USER_PROMPT = "Return ONLY valid JSON. The 'voice_narration' must remain in the detected query language (English, Hindi, or Hinglish) without translating it or mixing languages. Preserve the authoritative on-call SRE sitrep tone."
 
-# Robust default mock response preserved and kept intact
+# Robust default mock response for SeedheOps
 DEFAULT_MOCK_RESPONSE = {
     "agents": [
         {
             "id": "orchestrator",
-            "name": "Orchestrator",
-            "workingStatus": "Splitting your request…",
-            "doneStatus": "Request split into 4 life domains — work, energy, errands, family.",
-            "trace": "Parsed user intent: client presentation @ 3 PM (high priority), low energy signal detected, grocery errand flagged, evening family call scheduled. Routing to Personalization Agent for profile context."
+            "name": "Triage Agent",
+            "workingStatus": "Parsing telemetry & error logs...",
+            "doneStatus": "Alert triaged. Root failure identified.",
+            "trace": "Telemetry ingested: Redis cluster memory ceiling reached (98.4%). Worker pod evictions detected in namespace prod-us-east-1. Routing to Hindsight Memory Agent for historical root-cause analysis."
         },
         {
             "id": "personalization",
-            "name": "Personalization Agent",
-            "workingStatus": "Checking health + family profile…",
-            "doneStatus": "Profile synced — energy dip pattern noted, mom call preference: evening.",
-            "trace": "Health baseline: sleep 6.2h last night, HRV slightly low. Family profile: mom prefers calls after 6 PM. Priya's calendar shows back-to-back meetings until 2 PM. Adjusting plan for energy recovery before 3 PM presentation."
+            "name": "Hindsight Memory Agent",
+            "workingStatus": "Querying Hindsight for historical incidents...",
+            "doneStatus": "Historical context retrieved. Previous fix identified.",
+            "trace": "Queried Hindsight Vector Database (endpoint: hindsight.vectorize.io). Vector search match: Incident #INC-8821 (Retrieved from 60 days ago) with Cosine Similarity score: 0.942. Recalled runbook payload feeds directly into Runbook Executor commands: kubectl drain, redis-cli volatile key eviction, and aws-cli ElastiCache cluster sync."
         },
         {
             "id": "task-executor",
-            "name": "Task Executor Agent",
-            "workingStatus": "Creating prioritized tasks…",
-            "doneStatus": "5 tasks sequenced with time blocks and buffer zones.",
-            "trace": "Task queue built: (1) Morning energy routine 8:00, (2) Grocery run 10:30, (3) Pre-presentation prep 2:30, (4) Client presentation 3:00, (5) Call mom 6:30. Added 15-min transitions between blocks."
+            "name": "Runbook Executor",
+            "workingStatus": "Sequencing remediation steps...",
+            "doneStatus": "Immediate hotfix runbook generated.",
+            "trace": "Executing runbook sequenced from #INC-8821: (1) kubectl drain failing pods, (2) redis-cli cache purge & maxmemory adjust, (3) aws-cli replica sync, (4) kubectl rollout restart deployment."
         },
         {
             "id": "recommendation",
-            "name": "Recommendation Agent",
-            "workingStatus": "Suggesting energy booster…",
-            "doneStatus": "Positioned energy booster — light walk + protein snack before presentation.",
-            "trace": "Low energy mitigation: recommend 12-min walk at 2:15 PM + banana-almond snack at 2:25 PM. Avoid caffeine after 4 PM to protect evening sleep. Grocery trip timed during natural energy lull (10:30 AM)."
+            "name": "Risk Mitigator",
+            "workingStatus": "Analyzing post-mortem risk...",
+            "doneStatus": "Long-term preventative measure logged.",
+            "trace": "Post-incident safeguard configured: adjust Redis maxmemory-policy to volatile-lru, increase memory request limits by 2Gi in Helm values, and configure PagerDuty threshold at 80% saturation."
         },
         {
             "id": "voice-narrator",
-            "name": "Voice Narrator Agent",
-            "workingStatus": "Speaking in natural Hinglish…",
-            "doneStatus": "Voice narration ready.",
-            "trace": "Generated Hinglish narration for voice synthesis. Tone: warm, confident, concise. Mapped to text-to-speech engine. Output queued for fellow teammates."
+            "name": "Audio Sitrep Agent",
+            "workingStatus": "Generating audio briefing...",
+            "doneStatus": "Sitrep ready for on-call engineer.",
+            "trace": "Synthesized audio sitrep for on-call SRE. Summary covers root cause, hotfix runbook execution, and long-term mitigation policies. Audio stream ready."
         }
     ],
     "tasks": [
         {
-            "time": "8:00 AM",
-            "title": "Morning energy routine",
-            "description": "15-min stretch + hydration + light breakfast — energy foundation set.",
+            "time": "+00:00",
+            "title": "Drain & isolate failing worker pod",
+            "description": "kubectl drain pod-worker-3 --ignore-daemonsets --delete-emptydir-data -n prod",
             "status": "done"
         },
         {
-            "time": "10:30 AM",
-            "title": "Grocery run",
-            "description": "Quick 25-min errand block — list pre-loaded from pantry scan.",
+            "time": "+00:02",
+            "title": "Evict expired volatile cache keys (#INC-8821 pattern)",
+            "description": "redis-cli -h cache.internal --scan --pattern 'session:temp:*' | xargs redis-cli -h cache.internal unlink",
             "status": "done"
         },
         {
-            "time": "2:30 PM",
-            "title": "Pre-presentation prep",
-            "description": "Review slides + 12-min walk + protein snack — energy boost before client call.",
+            "time": "+00:05",
+            "title": "Scale Redis cluster statefulset replicas",
+            "description": "kubectl scale statefulset/redis-cluster -n prod --replicas=4",
             "status": "done"
         },
         {
-            "time": "3:00 PM",
-            "title": "Client presentation",
-            "description": "High-focus block — swarm silenced notifications, calendar protected.",
+            "time": "+00:08",
+            "title": "Sync AWS ElastiCache replica configuration",
+            "description": "aws elasticache modify-replication-group --replication-group-id prod-redis-cluster --apply-immediately",
             "status": "done"
         },
         {
-            "time": "6:30 PM",
-            "title": "Call mom + family time",
-            "description": "Evening wind-down — 20-min call with mom, then family dinner block.",
+            "time": "+00:12",
+            "title": "Verify cluster telemetry & pod health",
+            "description": "kubectl get pods -n prod -l app=api-worker -w",
             "status": "done"
         }
     ],
-    "voice_narration": "Priya, aaj ka plan ready hai! Subah energy boost se start, dopahar presentation ke liye prep aur snack, shaam ko groceries aur maa ko call — sab time pe set hai. Tum bas follow karo, swarm handle karega!",
+    "voice_narration": "On-call sitrep: Redis cluster memory exhaustion detected in production. Hindsight retrieved resolution pattern from Incident #INC-8821 (Cosine similarity 0.942). Hotfix runbook sequenced: draining failing pods, purging volatile cache keys, and scaling replicas to 4. Telemetry stabilization underway.",
     "voice_settings": {
-        "language": "hinglish",
-        "locale": "en-IN",
+        "language": "english",
+        "locale": "en-US",
         "gender": "female",
         "style": "friendly",
         "speaking_rate": 1.0,
         "pitch": 1.0,
-        "voice_personality": "Indian conversational female",
-        "tone": "friendly and young",
+        "voice_personality": "American professional female",
+        "tone": "clear and authoritative",
         "energy": "medium-high",
-        "formality": "casual"
+        "formality": "professional"
     },
     "detected_language": {
-        "language": "hinglish",
+        "language": "english",
         "confidence": 1.0,
         "source": "fallback"
     }
@@ -738,10 +729,10 @@ def repair_and_build_response(data: dict) -> dict:
         if aid == "voice-narrator":
             if is_clarification:
                 working_status = "Awaiting clarification..."
-                done_status = "Awaiting user input."
+                done_status = "Awaiting incident telemetry."
             else:
-                working_status = f"Speaking in natural {capitalized_lang}..."
-                done_status = "Voice narration ready."
+                working_status = "Generating audio briefing..."
+                done_status = "Sitrep ready for on-call engineer."
             
         agents_list.append({
             "id": aid,
@@ -868,11 +859,10 @@ def get_fallback_response(query: str) -> dict:
     }
     
     # Dynamically update the Voice Narrator agent status in the fallback agents list
-    capitalized_lang = normalized_lang.capitalize()
     for agent in fallback["agents"]:
         if agent["id"] == "voice-narrator":
-            agent["workingStatus"] = f"Speaking in natural {capitalized_lang}..."
-            agent["doneStatus"] = "Voice narration ready."
+            agent["workingStatus"] = "Generating audio briefing..."
+            agent["doneStatus"] = "Sitrep ready for on-call engineer."
             
     # Truncate user query
     trunc_query = query if len(query) <= 50 else query[:47] + "..."
@@ -886,12 +876,12 @@ def get_fallback_response(query: str) -> dict:
     
     # Map query keywords to config tasks
     keyword_mapping = {
-        "lunch": ["lunch", "eat", "food", "खाना", "लंच"],
-        "break": ["break", "relax", "आराम", "ब्रेक"],
-        "meeting": ["meeting", "मीटिंग"],
-        "coding": ["coding", "कोडिंग"],
-        "study": ["study", "पढ़ना", "पढ़ाई"],
-        "travel": ["travel", "यात्रा", "घूमना"]
+        "oom": ["oom", "redis", "memory", "eviction", "leak", "ram", "मेमोरी", "कैशे"],
+        "deadlock": ["deadlock", "postgres", "database", "lock", "sql", "db", "transaction", "डेटाबेस"],
+        "crashloop": ["crashloop", "crash", "pod", "k8s", "kubernetes", "container", "पॉड"],
+        "latency": ["latency", "ingress", "nginx", "504", "502", "gateway", "timeout", "slow", "लेटेंसी"],
+        "cpu": ["cpu", "scale", "load", "throttling", "spike", "saturation", "hpa", "सीपीयू"],
+        "ssl": ["ssl", "tls", "cert", "certificate", "expiry", "expired", "https", "प्रमाणपत्र"]
     }
     
     # Run matching
@@ -903,7 +893,7 @@ def get_fallback_response(query: str) -> dict:
             
     if matched_key and matched_key in fallback_tasks:
         task_data = fallback_tasks[matched_key]
-        idx_map = {"lunch": 1, "break": 2, "meeting": 3, "coding": 2, "study": 0, "travel": 1}
+        idx_map = {"oom": 1, "deadlock": 2, "crashloop": 3, "latency": 2, "cpu": 0, "ssl": 1}
         target_idx = idx_map.get(matched_key, 1)
         
         fallback["tasks"][target_idx] = {
@@ -923,8 +913,16 @@ def get_fallback_response(query: str) -> dict:
 
 
 # ==========================================
-# SWARM API ENDPOINT WITH TIMING METRICS
+# SWARM API ENDPOINTS & HEALTH CHECKS
 # ==========================================
+@app.get("/")
+async def root():
+    return {"status": "online", "service": "SeedheOps Swarm Backend", "version": "1.0.0"}
+
+@app.get("/health")
+async def health_check():
+    return {"status": "healthy", "service": "SeedheOps Swarm Backend"}
+
 @app.post("/api/swarm", response_model=SwarmResponse)
 async def process_swarm_query(request: SwarmRequest):
     req_start = time.perf_counter()

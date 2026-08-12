@@ -2,11 +2,11 @@ import { motion } from 'framer-motion'
 import { Bot, ChevronRight, Activity } from 'lucide-react'
 
 const activityList = [
-  { name: 'Orchestrator', task: 'Planning life domains...', color: '#0EA5E9' },
-  { name: 'Personalization Agent', task: 'Syncing health profile...', color: '#0EA5E9' },
-  { name: 'Task Executor Agent', task: 'Sequencing time blocks...', color: '#0EA5E9' },
-  { name: 'Recommendation Agent', task: 'Mitigating energy dips...', color: '#0EA5E9' },
-  { name: 'Voice Narrator Agent', task: 'Synthesizing Hinglish speech...', color: '#0EA5E9' },
+  { name: 'Triage Agent', task: 'Parsing telemetry & error logs...', color: '#0EA5E9' },
+  { name: 'Hindsight Memory Agent', task: 'Querying historical incidents...', color: '#0EA5E9' },
+  { name: 'Runbook Executor', task: 'Sequencing remediation steps...', color: '#0EA5E9' },
+  { name: 'Risk Mitigator', task: 'Analyzing post-mortem risk...', color: '#0EA5E9' },
+  { name: 'Audio Sitrep Agent', task: 'Generating audio briefing...', color: '#0EA5E9' },
 ]
 
 export default function LiveAgentWidget({ onOpenSwarm }) {
@@ -15,7 +15,7 @@ export default function LiveAgentWidget({ onOpenSwarm }) {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Bot size={18} className="text-[#0EA5E9]" />
-          <h3 className="font-display font-semibold text-sm text-[#F1F5F9]">Autonomous Swarm</h3>
+          <h3 className="font-display font-semibold text-sm text-[#F1F5F9]">DevOps Swarm</h3>
         </div>
         {onOpenSwarm && (
           <button
